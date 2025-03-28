@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- span:not() -> () 안에 데이터 제외 -->
+    <!-- (:last-child) -> span 의 마지막 데이터  -->
+    <style>
+        #page > span:not(:last-child) {margin-right:10px;}
+        #page > span{cursor : pointer;}
+        .selected {font-size: 1.2em; color:red;}
+    </style>
+</head>
+<body>
+    <div id="page">
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+    </div>
+    <script>
+        const $page = document.querySelector('#page');
+        const pageValue = 10;
+        const pageNumeberArr = [];
+        for(let i=1; i<=pageValue; i++){
+            // span 태그 생성
+            const span = document.createElement('span'); // <span></span>
+            if(i === 1) {
+                span.classList.add('selected');
+            }
+            pageNumeberArr.push(span);
+            span.addEventListener('click',(e) => {
+                pageNumeberArr.forEach(item => {
+                    item.classList.toggle('selected', iem.innerText == i);
+                });
+
+                e.target.classList.toggle('selected' , false);
+                // add 는 현상 유지, 즉 추가만
+                // toggle 은 있으면 넣고 없으면 빼는 방식
+            });
+            span.innerText = i; // <span>3</span>
+            $page.appendChild(span);
+        }
+    </script>
+</body>
+</html>
