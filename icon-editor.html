@@ -16,33 +16,54 @@
         });
         function createIconEditor(parent, nx, ny) {
             //input-color
-            const $color = elt('input', {type: 'color'});
-            parent.appendChild($color)
-
-            //input-button(value"모두 삭제")
-            const clear = elt('input', { type: 'button', value: '모두 삭제'});
-            parent.apppendChild(clear);
-
+            const $color = elt('input', { type: 'color' });
+            parent.appendChild($color);
+            //input-button(value="모두 삭제")
+            const $clear = elt('input', { type: 'button', value: '모두 삭제'});
+            $clear.addEventListener('click', () => {
+                cells.forEach(item => item.style.backgroundColor = '#fff');
+            });
+            parent.appendChild($clear);
             //table
             const table = elt('table');
             const cells = []; //td 요소를 저장하는 배열
             for(let i=0; i<ny; i++) {
                 const tr = elt('tr');
                 table.appendChild(tr);
-
                 for(let i2=0; i2<nx; i2++) {
                     const td = elt('td');
                     td.addEventListener('click', e => {
-                        e.target.style.backgroundColor = $color.value;
-                    }); 
+                        const colorRgb = hexToRgb($color.value);
+                        console.log(colorRgb);
+                        //값이 없거나 흰색이라면
+                        if(e.target.style.backgroundColor === '' || e.target.style.backgroundColor === 'rgb(255, 255, 255)' )  {
+                            console.log('값이 없거나 흰색이었음');
+                            e.target.style.backgroundColor = $color.value;
+                        } else if(e.target.style.backgroundColor !== colorRgb) {
+                            console.log("다른 색상 값");
+                            e.target.style.backgroundColor = $color.value;
+                        } else { //색이 있었다면
+                            console.log('색상 있음');
+                            e.target.style.backgroundColor = '';
+                        }
+                    });
                     cells.push(td);
                     tr.appendChild(td);
                 }
             }
             parent.appendChild(table);
         }
-
-        //엘리먼트를 생성하는 함수
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, ""); // # 제거
+            if (hex.length === 3) {
+                hex = hex.split("").map(c => c + c).join(""); // 3자리 hex를 6자리로 변환
+            }
+            let r = parseInt(hex.substring(0, 2), 16);
+            let g = parseInt(hex.substring(2, 4), 16);
+            let b = parseInt(hex.substring(4, 6), 16);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+        // 엘리먼트를 생성하는 함수
         //name: 태그명, attr: 속성 객체
         function elt(name, attrs) {
             const node = document.createElement(name);
@@ -50,7 +71,10 @@
                 for(const attr in attrs) {
                     if(attrs.hasOwnProperty(attr)) {
                         node.setAttribute(attr, attrs[attr]);
-
+                        //node[`${attr}`] = attrs[attr];
+                        //node.id = '값';
+                        //node['id'] = '값';
+                        //node['id'] = '값';
                     }
                 }
             }
@@ -59,14 +83,10 @@
                 if( typeof child === 'string' ) {
                     child = document.createTextNode(child);
                 }
-                node.appendChild(child)
+                node.appendChild(child);
             }
-
             return node;
-       }
-       elt('div', null, 'aaaa')
+        }
     </script>
-    <span>하하</span>
-    <div>aaa</div>
 </body>
 </html>
